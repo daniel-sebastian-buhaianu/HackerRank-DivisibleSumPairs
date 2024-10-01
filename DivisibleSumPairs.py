@@ -17,12 +17,18 @@ import sys
 #
 
 def divisibleSumPairs(n, k, ar):
+    remainder_count = [0] * k
     pairs = 0
-    n = len(ar)
-    for i in range(n-1):
-        for j in range(i+1, n):
-            if (ar[i] + ar[j]) % k == 0:
-                pairs += 1
+
+    for num in ar:
+        remainder = num % k
+        complement = (k - remainder) % k
+        
+        # If complement exists, it means we can form pairs with the current number
+        pairs += remainder_count[complement]
+
+        remainder_count[remainder] += 1
+    
     return pairs
 
 if __name__ == '__main__':
