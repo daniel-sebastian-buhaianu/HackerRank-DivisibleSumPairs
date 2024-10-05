@@ -4,38 +4,27 @@ import java.security.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.function.*;
 import java.util.regex.*;
-import java.util.stream.*;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
-class Result {
-
-    /*
-     * Complete the 'divisibleSumPairs' function below.
-     *
-     * The function is expected to return an INTEGER.
-     * The function accepts following parameters:
-     *  1. INTEGER n
-     *  2. INTEGER k
-     *  3. INTEGER_ARRAY ar
-     */
-
-    public static int divisibleSumPairs(int n, int k, List<Integer> ar) {
-        int numberOfPairs = 0;
+class Result
+{
+    public static int divisibleSumPairs(int n, int k, List<Integer> ar)
+    {
+        int[] remainderCount = new int[k];
+        int pairs = 0;
         
-        for (int i = 0; i < n-1; i++) {
-            for (int j = i+1; j < n; j++) {
-                if ((ar.get(i) + ar.get(j)) % k == 0) {
-                    numberOfPairs++;
-                }
-            }
+        for (int i = 0; i < n; i++)
+        {
+            int remainder = ar.get(i) % k;
+            int complement = (k - remainder) % k;
+            
+            pairs += remainderCount[complement];
+            
+            remainderCount[remainder]++;
         }
         
-        return numberOfPairs;
+        return pairs;
     }
-
 }
 
 public class Solution {
@@ -49,9 +38,14 @@ public class Solution {
 
         int k = Integer.parseInt(firstMultipleInput[1]);
 
-        List<Integer> ar = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-            .map(Integer::parseInt)
-            .collect(toList());
+        String[] arTemp = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+
+        List<Integer> ar = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            int arItem = Integer.parseInt(arTemp[i]);
+            ar.add(arItem);
+        }
 
         int result = Result.divisibleSumPairs(n, k, ar);
 
